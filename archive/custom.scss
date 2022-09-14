@@ -1,0 +1,36 @@
+$primary:       #37da96;
+$secondary:     #7f2ae0;
+$success:       #9feb9f;
+$info:          #0db3f5; 
+$warning:       #f36e15;
+$danger:        #e24e4e;
+$light:         #ffffff;
+$dark:          #464646;
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-colors-map
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px 
+) !default;
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body{
+  background-color: $secondary;
+}
