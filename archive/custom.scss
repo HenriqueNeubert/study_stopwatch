@@ -21,7 +21,7 @@ $theme-colors: (
 );
 
 $container-max-widths: (
-  sm: 540px,
+  sm: 540px, 
   md: 720px,
   lg: 960px,
   xl: 1140px,
@@ -30,7 +30,5 @@ $container-max-widths: (
 
 
 @import "../node_modules/bootstrap/scss/bootstrap";
+@import "style";
 
-body{
-  background-color: $secondary;
-}

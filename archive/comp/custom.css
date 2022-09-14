@@ -641,7 +641,7 @@ progress {
 }
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
-    max-width: 721px;
+    max-width: 720px;
   }
 }
 @media (min-width: 992px) {
@@ -10766,7 +10766,7 @@ textarea.form-control-lg {
   }
 }
 body {
-  background-color: #7f2ae0;
+  background-color: #464646;
 }
 
 /*# sourceMappingURL=custom.css.map */
