@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "sudo docker start xampp8 && cd ./archive && sass --watch custom.scss:compiled/custom.css",
+    "stop": "sudo docker stop xampp8 -t 0"    
   },
   "repository": {
     "type": "git",
