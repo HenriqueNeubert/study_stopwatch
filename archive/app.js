@@ -25,14 +25,14 @@ let timeMinute = 0
 let timeSecond = 0
 let timeMillisecond = 0
 
-hide(timer)
-hide(inputStop)
-hide(inputStop)
-hide(inputStart)
-hide(inputReset)
-hide(inputSubmit)
-hide(inputResume)
-hide(inputNewTime)
+display(timer, 'none')
+display(inputStop, 'none')
+display(inputStop, 'none')
+display(inputStart, 'none')
+display(inputReset, 'none')
+display(inputSubmit, 'none')
+display(inputResume, 'none')
+display(inputNewTime, 'none')
 
 // FUNCTIONS
 
@@ -42,10 +42,10 @@ function HandleSubmit(event)
   handleStop()
   const data = handleData(); //? pega dados name/time (object)
   handleInsertDadaBase(data); //? envia o (object)
-  hide(inputReset)
-  hide(inputSubmit)
-  hide(inputResume)
-  show(inputNewTime)
+  display(inputReset, 'none')
+  display(inputSubmit, 'none')
+  display(inputResume, 'none')
+  display(inputNewTime, 'flex')
 }
 
 function handleInsertDadaBase(data)
@@ -127,27 +127,30 @@ function handleNext() //? botão de próximo
   if(validation() === true){ //? valida o que foi digitado  
     //? manda salvar o nome
     saveDataName() 
-    hide(boxInputName)
-    hide(inputNext) 
+    display(boxInputName, 'none')
+    display(inputNext, 'none') 
     //? reseta o timer
     handleResetTime()     
-    show(timer)
-    show(inputStart)      
+    display(timer, 'flex')
+    display(inputStart, 'flex')      
   }  
 }
 
 function handleNewTime()
 {
-  
+  display(timer, 'none')
+  display(boxInputName, 'block')
+  display(inputStart, 'flex')
+  display(inputNewTime, 'none')
 }
 
 function handleStart() //? inicia timer
 {
-  show(reset)
-  show(inputStop)
-  show(inputSubmit)
-  hide(inputStart)
-  hide(inputResume)
+  display(reset, 'flex')
+  display(inputStop, 'flex')
+  display(inputSubmit, 'flex')
+  display(inputStart, 'none')
+  display(inputResume, 'none')
   //? ajuste para não travar o navegador
   //? setInterval = a cada 10 milissegundos(
   //? pois a cada 1 milissegundo trava dependendo do navegador).
@@ -157,17 +160,17 @@ function handleStart() //? inicia timer
 
 function handleStop() //? para o timer
 {
-  hide(inputStop)
-  show(inputResume)
-  show(inputSubmit)
+  display(inputStop, 'none')
+  display(inputResume, "flex")
+  display(inputSubmit, "flex")
   //? para não termos vários timers funcionando ao fundo
   clearInterval(cron); //? função padrão do js que para o tempo
 }
 
 function handleResetTime()//? reseta timer
 {  
-  show(inputStart)
-  hide(inputResume)
+  display(inputStart, 'flex')
+  display(inputResume, 'none')
 
   timeHour = 0;
   timeMinute = 0;
@@ -180,20 +183,16 @@ function handleResetTime()//? reseta timer
   timeMillisecondElem.innerHTML = '000';
 
   handleStop()
-  hide(submit)
-  hide(inputStop)
-  hide(inputReset)
-  hide(inputResume)
+  
+  display(submit, 'none')
+  display(inputStop, 'none')
+  display(inputReset, 'none')
+  display(inputResume, 'none')
 }
 
-function hide(el)
+function display(el,status) //? altera display dos elementos
 {
-  el.style.display = 'none';   
-}
-
-function show(el)
-{
-  el.style.display = 'flex';  
+  el.style.display = status;   
 }
 
 function validation() //? valida os dados
