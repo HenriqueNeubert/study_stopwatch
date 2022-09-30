@@ -5,11 +5,13 @@ const inputNext = document.getElementById('next')
 const inputName = document.getElementById('name')
 const inputStop = document.getElementById('stop') 
 const inputReset = document.getElementById('reset') 
+const showName = document.getElementById('showName')
 const inputSubmit = document.getElementById('submit') 
 const inputResume = document.getElementById('resume') 
 const inputStart = document.getElementById('initial')
 const inputNewTime = document.getElementById('newTime') 
 
+const nameData = inputName.value 
 const boxInputName = document.getElementById('boxInputName') 
 
 let cron
@@ -32,11 +34,14 @@ hide(inputSubmit)
 hide(inputResume)
 hide(inputNewTime)
 
+// FUNCTIONS
+
 function HandleSubmit(event)
 {
-  event.preventDefault();
-  const data = handleData();  
-  handleInsertDadaBase(data);  
+  event.preventDefault(); //? para o reload
+  handleStop()
+  const data = handleData(); //? pega dados name/time (object)
+  handleInsertDadaBase(data); //? envia o (object)
   hide(inputReset)
   hide(inputSubmit)
   hide(inputResume)
@@ -45,36 +50,39 @@ function HandleSubmit(event)
 
 function handleInsertDadaBase(data)
 {
-  const arr = handleGetDataBase();
-  arr.push(data);
+  const arr = handleGetDataBase(); //? pega os dados do banco
+  arr.push(data); //? add o (object) e junta ao array que veio do banco
 
+  //? cria um novo array e transf em string
   const newData = JSON.stringify(arr);
-  localStorage.setItem('Atletas', newData)  
+  //? envia esses dados para o banco, na tabela atletas 
+  localStorage.setItem('Atletas', newData) 
 }
 
 function handleGetDataBase()
 {
-  const data = localStorage.getItem('Atletas');
-  if(data){
+  const data = localStorage.getItem('Atletas'); //? pega dados do banco
+  if(data){ //? se tiver dados, retorna eles
     return JSON.parse(data);
   }
-
+  //? se não, retorna array vazio
   return []
 } 
 
 function handleData()
 {
+  //? cria um objeto
   const objItem = new Object();
-  objItem.name = saveDataName();
-  objItem.time = saveDataTime();
+  //? dentro do objeto cria um name e time
+  objItem.name = saveDataName(); //? add name
+  objItem.time = saveDataTime(); //? add time
   
   return objItem
 }
 
-//*SAVE DATA
-function saveDataTime()
+function saveDataTime() //? guarda dados de Tempo
 {    
-  return{
+  return{ //? retorna o seguinte objeto
     horas: timeHourElem.innerText,  
     minutos: timeMinuteElem.innerText,
     segundos: timeSecondElem.innerText,
@@ -82,17 +90,14 @@ function saveDataTime()
   }  
 }
 
-function saveDataName()
-{  
-  let nameData = inputName.value  
-  document.getElementById('showName').innerText = nameData //!provisorio
-  return nameData
+function saveDataName() //? pega nome digitado 
+{    
+  showName.innerText = nameData //? texto do input
+  return nameData 
 }
-//*SAVE DATA
 
-//* FOR TIMER --- START
-function handleTimer()
-{
+function handleTimer() //? função do tempo
+{//! ESTUDAR
     if ((timeMillisecond += 10) == 1000) {
       timeMillisecond = 0;
       timeSecond++;
@@ -105,78 +110,61 @@ function handleTimer()
       timeMinute = 0;
       timeHour++;
     }
+    //? Altera o texto para o que for enviado aqui
+    //? conforme os intervalos de tempo
     timeHourElem.innerText = returnData(timeHour);
     timeMinuteElem.innerText = returnData(timeMinute);
     timeSecondElem.innerText = returnData(timeSecond);
     timeMillisecondElem.innerText = returnData(timeMillisecond);
   }
   
-  function returnData(input) {
+  function returnData(input) { //! ESTUDAR
     return input >= 10 ? input : `0${input}`
 }
-//* FOR TIMER --- END
 
-//* FOR BOTTONS --- START
-function handleNext()
+function handleNext() //? botão de próximo
 {     
-  if(validation() === true){  
+  if(validation() === true){ //? valida o que foi digitado  
+    //? manda salvar o nome
     saveDataName() 
     hide(boxInputName)
     hide(inputNext) 
+    //? reseta o timer
     handleResetTime()     
     show(timer)
     show(inputStart)      
   }  
 }
 
-document.body.onload = addElement;
-
-function addElement () {
-  const newItemTR = document.createElement("tr");
-  const newItemTH = document.createElement("th");
-
-  var textNode = document.createTextNode(); 
-
-  newItemTR.appendChild(textNode);
-  document.getElementById("tbody").appendChild(newItemTR); 
-
-}
-
-  /*
-<tr>
-  <th scope="row">1</th>
-  <td>Henrique</td>
-  <td>01:02</td>
-</tr> 
-*/
-
 function handleNewTime()
 {
   
 }
 
-function handleStart()
+function handleStart() //? inicia timer
 {
   show(reset)
   show(inputStop)
+  show(inputSubmit)
   hide(inputStart)
-  // handlePause();///!IMPORTANTE
   hide(inputResume)
+  //? ajuste para não travar o navegador
   //? setInterval = a cada 10 milissegundos(
   //? pois a cada 1 milissegundo trava dependendo do navegador).
+  //? chama função handleTimer() e atualiza timer a cada 10ms
   cron = setInterval(() => { handleTimer(); }, 10)
 }
 
-function handlePause()
+function handleStop() //? para o timer
 {
   hide(inputStop)
   show(inputResume)
   show(inputSubmit)
   //? para não termos vários timers funcionando ao fundo
-  clearInterval(cron); 
+  clearInterval(cron); //? função padrão do js que para o tempo
 }
 
-function handleResetTime()
+function handleResetTime()//? reseta timer
 {  
   show(inputStart)
   hide(inputResume)
@@ -191,39 +179,39 @@ function handleResetTime()
   timeSecondElem.innerHTML = '00';
   timeMillisecondElem.innerHTML = '000';
 
-  handlePause()
+  handleStop()
   hide(submit)
   hide(inputStop)
   hide(inputReset)
   hide(inputResume)
 }
-//* FOR BOTTONS --- END
 
-//* SHOW OR NO
 function hide(el)
 {
   el.style.display = 'none';   
 }
+
 function show(el)
 {
   el.style.display = 'flex';  
 }
-//* SHOW OR NO
 
-//*VALIDACOES
-function validation()
+function validation() //? valida os dados
 {
-  if(inputName.value == '' || inputName.value.length <= 2){    
-    console.log(inputName.value);    
+  //? se não digitar / ou se digitos forem menor que 2
+  if(inputName.value == '' || inputName.value.length <= 2){  
+    //? retorna o erro e false
     alert('Digite seu Nome')
     return false
   }
+  //? se não continua
   return true
 }
-//*VALIDACOES
+
+// EVENTS
 
 inputNext.addEventListener('click', handleNext)
-inputStop.addEventListener('click', handlePause)
+inputStop.addEventListener('click', handleStop)
 inputStart.addEventListener('click', handleStart)
 inputResume.addEventListener('click', handleStart)
 form.addEventListener('submit', HandleSubmit, false)
