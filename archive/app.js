@@ -1,7 +1,8 @@
+// const { cleanData } = require("jquery")
+
 const form = document.getElementById('form') 
 
 const timer = document.getElementById('timer') 
-const inputNext = document.getElementById('next') 
 const inputName = document.getElementById('name')
 const inputStop = document.getElementById('stop') 
 const inputReset = document.getElementById('reset') 
@@ -28,7 +29,7 @@ let timeMillisecond = 0
 display(timer, 'none')
 display(inputStop, 'none')
 display(inputStop, 'none')
-display(inputStart, 'none')
+display(inputStart, 'flex')
 display(inputReset, 'none')
 display(inputSubmit, 'none')
 display(inputResume, 'none')
@@ -39,9 +40,11 @@ display(inputNewTime, 'none')
 function HandleSubmit(event)
 {
   event.preventDefault(); //? para o reload
+  handleShowTime()
   handleStop()
   const data = handleData(); //? pega dados name/time (object)
   handleInsertDadaBase(data); //? envia o (object)
+
   display(inputReset, 'none')
   display(inputSubmit, 'none')
   display(inputResume, 'none')
@@ -80,6 +83,47 @@ function handleData()
   return objItem
 }
 
+function cleanTodo()
+{
+  const tbody = document.getElementById('tbody');
+  tbody.innerText = ''
+}
+
+handleShowTime()
+function handleShowTime()
+{
+  const data = handleGetDataBase();
+  
+  cleanTodo()
+  data.forEach(function(item, index) {
+    showTime(item, index)   
+  });
+}
+
+function showTime(item, index)
+{   
+  const tbody = document.getElementById('tbody');//? cria div
+  const tr = document.createElement('tr');//? cria div
+  const th = document.createElement('th');//? cria title
+  const tdA = document.createElement('td');//? cria title
+  const hourB = item.time.horas
+  const minuteB = item.time.minutos
+  const secondB = item.time.segundos
+  const millisecondB = item.time.millisegundos
+  const tdB = document.createElement('td');//? cria title
+
+  tr.classList.add('item'); //? adiciona classe .todo
+  th.innerText = index; //? valor recebido do imputCreate
+  tr.appendChild(th); //? diz: title fica dentro de todo
+  tdA.innerText = item.name; //? valor recebido do imputCreate
+  tr.appendChild(tdA); //? diz: title fica dentro de todo  
+  tdB.innerText = hourB + ':' + minuteB + ':' + secondB + ':' + millisecondB
+  tr.appendChild(tdB);
+  tr.appendChild(tdB); //? diz: title fica dentro de todo
+
+  tbody.appendChild(tr);
+}
+
 function saveDataTime() //? guarda dados de Tempo
 {    
   return{ //? retorna o seguinte objeto
@@ -92,8 +136,9 @@ function saveDataTime() //? guarda dados de Tempo
 
 function saveDataName() //? pega nome digitado 
 {    
-  showName.innerText = nameData //? texto do input
-  return nameData 
+  const nameData = inputName.value //? texto do input
+
+  return nameData   
 }
 
 function handleTimer() //? função do tempo
@@ -122,35 +167,37 @@ function handleTimer() //? função do tempo
     return input >= 10 ? input : `0${input}`
 }
 
-function handleNext() //? botão de próximo
-{     
-  if(validation() === true){ //? valida o que foi digitado  
-    //? manda salvar o nome
-    saveDataName() 
-    display(boxInputName, 'none')
-    display(inputNext, 'none') 
-    //? reseta o timer
-    handleResetTime()     
-    display(timer, 'flex')
-    display(inputStart, 'flex')      
-  }  
-}
-
 function handleNewTime()
 {
   display(timer, 'none')
   display(boxInputName, 'block')
   display(inputStart, 'flex')
   display(inputNewTime, 'none')
+
+  inputName.value = '';
 }
 
 function handleStart() //? inicia timer
 {
+  if(validation() === true){ //? valida o que foi digitado  
+    //? manda salvar o nome    
+    display(boxInputName, 'none')
+    display(inputStart, 'none') 
+    //? reseta o timer
+    handleResetTime()     
+    display(timer, 'flex')
+    display(inputStart, 'flex')      
+  }else{
+    handleStop()
+  }  
+  display(boxInputName, 'none')  
   display(reset, 'flex')
+  display(timer, 'flex')
   display(inputStop, 'flex')
   display(inputSubmit, 'flex')
   display(inputStart, 'none')
   display(inputResume, 'none')
+
   //? ajuste para não travar o navegador
   //? setInterval = a cada 10 milissegundos(
   //? pois a cada 1 milissegundo trava dependendo do navegador).
@@ -183,7 +230,7 @@ function handleResetTime()//? reseta timer
   timeMillisecondElem.innerHTML = '000';
 
   handleStop()
-  
+
   display(submit, 'none')
   display(inputStop, 'none')
   display(inputReset, 'none')
@@ -209,7 +256,7 @@ function validation() //? valida os dados
 
 // EVENTS
 
-inputNext.addEventListener('click', handleNext)
+inputStart.addEventListener('click', handleStart)
 inputStop.addEventListener('click', handleStop)
 inputStart.addEventListener('click', handleStart)
 inputResume.addEventListener('click', handleStart)
