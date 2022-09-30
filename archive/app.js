@@ -122,12 +122,33 @@ function handleNext()
   if(validation() === true){  
     saveDataName() 
     hide(boxInputName)
-    hide(inputNext)
+    hide(inputNext) 
     handleResetTime()     
     show(timer)
     show(inputStart)      
   }  
 }
+
+document.body.onload = addElement;
+
+function addElement () {
+  const newItemTR = document.createElement("tr");
+  const newItemTH = document.createElement("th");
+
+  var textNode = document.createTextNode(); 
+
+  newItemTR.appendChild(textNode);
+  document.getElementById("tbody").appendChild(newItemTR); 
+
+}
+
+  /*
+<tr>
+  <th scope="row">1</th>
+  <td>Henrique</td>
+  <td>01:02</td>
+</tr> 
+*/
 
 function handleNewTime()
 {
