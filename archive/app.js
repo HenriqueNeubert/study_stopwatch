@@ -1,5 +1,7 @@
 // const { cleanData } = require("jquery")
 
+// const { get } = require("jquery")
+
 const form = document.getElementById('form') 
 
 const timer = document.getElementById('timer') 
