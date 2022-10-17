@@ -44,10 +44,9 @@ function HandleSubmit(event)
   event.preventDefault(); //? para o reload
   handleShowTime()
   handleStop()
-  const data = handleData(); //? pega dados name/time (object)
-  handleInsertDadaBase(data); //? envia o (object)
 
   display(inputReset, 'none')
+  display(inputStop, 'none')
   display(inputSubmit, 'none')
   display(inputResume, 'none')
   display(inputNewTime, 'flex')
@@ -91,13 +90,14 @@ function cleanTodo()
   tbody.innerText = ''
 }
 
-handleShowTime()
 function handleShowTime()
 {
-  const data = handleGetDataBase();
+  const newData = handleData(); //? pega dados name/time (object)
+  handleInsertDadaBase(newData); //? envia o (object)
+  const oldData = handleGetDataBase();
   
   cleanTodo()
-  data.forEach(function(item, index) {
+  oldData.forEach(function(item, index) {
     showTime(item, index)   
   });
 }
@@ -188,30 +188,38 @@ function handleStart() //? inicia timer
     //? reseta o timer
     handleResetTime()     
     display(timer, 'flex')
-    display(inputStart, 'flex')      
+    display(inputStart, 'flex')     
+    
+    display(boxInputName, 'none')  
+    display(reset, 'flex')
+    display(timer, 'flex')
+    display(inputStop, 'flex')
+    display(inputSubmit, 'flex')
+    display(inputStart, 'none')
+    display(inputResume, 'none')
+
+    //? ajuste para não travar o navegador
+    //? setInterval = a cada 10 milissegundos(
+    //? pois a cada 1 milissegundo trava dependendo do navegador).
+    //? chama função handleTimer() e atualiza timer a cada 10ms
+    cron = setInterval(() => { handleTimer(); }, 10)
   }else{
     handleStop()
+    return false
   }  
-  display(boxInputName, 'none')  
-  display(reset, 'flex')
-  display(timer, 'flex')
-  display(inputStop, 'flex')
-  display(inputSubmit, 'flex')
-  display(inputStart, 'none')
-  display(inputResume, 'none')
-
-  //? ajuste para não travar o navegador
-  //? setInterval = a cada 10 milissegundos(
-  //? pois a cada 1 milissegundo trava dependendo do navegador).
-  //? chama função handleTimer() e atualiza timer a cada 10ms
-  cron = setInterval(() => { handleTimer(); }, 10)
+  
 }
 
 function handleStop() //? para o timer
 {
-  display(inputStop, 'none')
-  display(inputResume, "flex")
-  display(inputSubmit, "flex")
+  // display(inputStop, 'none')
+  // display(inputResume, "flex")
+  // display(inputSubmit, "flex")
+
+  timeHour = 0;
+  timeMinute = 0;
+  timeSecond = 0;
+  timeMillisecond = 0;
   //? para não termos vários timers funcionando ao fundo
   clearInterval(cron); //? função padrão do js que para o tempo
 }
@@ -251,7 +259,7 @@ function validation() //? valida os dados
     //? retorna o erro e false
     alert('Digite seu Nome')
     return false
-  }
+  }  
   //? se não continua
   return true
 }
