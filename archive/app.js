@@ -266,6 +266,13 @@ function validation() //? valida os dados
 
 // EVENTS
 
+document.addEventListener("keydown", function(e) {
+  if(e.keyCode === 13) {
+        
+    e.preventDefault();
+    
+  }
+});
 inputStart.addEventListener('click', handleStart)
 inputStop.addEventListener('click', handleStop)
 inputStart.addEventListener('click', handleStart)
